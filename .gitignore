@@ -1,0 +1,6 @@
+app_data.csv
+__pycache__/
+.env
+venv/
+.venv/
+.DS_Store
