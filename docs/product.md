@@ -1,12 +1,12 @@
 # Game Overview
-- The game starts with an empty roster of seven positions and a randomly selected NFL week and season
+- The game starts with an empty roster of seven positions and a randomly selected NFL week and season.
 - Each turn, a team wheel is spun and a player must be selected, based on their PPR fantasy points from that team to fill any open position in the roster.
 - After a selection, the player and their points are saved in the selected roster slot and a new team is spun; this repeats until the roster is full.
 - The goal of the game is to have the points for each position on the filled roster add up to 200.
 # Roster Structure
-- The roster is made of seven slots based on player position
+- The roster is made of seven slots based on player position.
 - There is one QB, two RB's, two WR's, one TE, and one FLEX.
-- The FLEX position can be filled by any RB, WR, or TE
+- The FLEX position can be filled by any RB, WR, or TE.
 # Game Initialization
 - An empty roster is created.
 - A random week from 1-14, and season-year from 2000-2024, are chosen and will not be changed for the rest of the round. Each selection will be based off the selected week and season.
