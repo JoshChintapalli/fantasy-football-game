@@ -10,7 +10,7 @@ slot_to_position = {
     "WR1" : "WR",
     "WR2" : "WR",
     "TE" : "TE",
-    "FLEX" : "FLEX"
+    "FLEX" : ["RB", "WR", "TE"]
 }
 
 def initialize_game(df):
@@ -41,7 +41,7 @@ def get_best_players(roster, selected_team, df):
     best_selection = {}
     seen_positons = set()
     for key, value in roster.items():
-        if value is None  and slot_to_position[key] not in seen_positons and slot_to_position[key] != "FLEX":
+        if value is None  and key != "FLEX" and slot_to_position[key] not in seen_positons:
             filtered = df[(df["position"] == slot_to_position[key]) & (df["recent_team"] == selected_team)]
             best_player = filtered.loc[filtered["fantasy_points_ppr"].idxmax(), ["player_display_name", "fantasy_points_ppr"]]
             best_selection[slot_to_position[key]] = best_player
@@ -49,8 +49,9 @@ def get_best_players(roster, selected_team, df):
     return best_selection
 
 def update_roster(current_roster, best_selection, position, selection):
-    player_data = best_selection[position]
-    current_roster[selection] = player_data
+    if position == slot_to_position[selection] or (selection == "FLEX" and position in slot_to_position[selection]):
+        player_data = best_selection[position]
+        current_roster[selection] = player_data
 
 def calculate_score(finished_roster):
     total = 0
@@ -64,9 +65,10 @@ selected_team = spin_wheel(teams)
 best_roster = get_best_players(roster, selected_team, df)
 print(roster)
 print()
-update_roster(roster, best_roster, 'RB', "RB1")
+update_roster(roster, best_roster, 'RB', "FLEX")
 print(roster)
 print()
+'''
 selected_team = spin_wheel(teams)
 best_roster = get_best_players(roster, selected_team, df)
 print(best_roster)
@@ -83,3 +85,4 @@ print(roster)
 print()
 points = calculate_score(roster)
 print(points)
+'''
