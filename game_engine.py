@@ -52,6 +52,9 @@ def update_roster(current_roster, best_selection, position, selection):
     if position == slot_to_position[selection] or (selection == "FLEX" and position in slot_to_position[selection]):
         player_data = best_selection[position]
         current_roster[selection] = player_data
+        return True
+    else:
+        return False
 
 def calculate_score(finished_roster):
     total = 0
@@ -59,7 +62,7 @@ def calculate_score(finished_roster):
         if value is not None:
             total += value["fantasy_points_ppr"]
     return total
-
+'''
 season, week, df, teams, roster = initialize_game(df)
 selected_team = spin_wheel(teams)
 best_roster = get_best_players(roster, selected_team, df)
@@ -68,7 +71,7 @@ print()
 update_roster(roster, best_roster, 'RB', "FLEX")
 print(roster)
 print()
-'''
+
 selected_team = spin_wheel(teams)
 best_roster = get_best_players(roster, selected_team, df)
 print(best_roster)
