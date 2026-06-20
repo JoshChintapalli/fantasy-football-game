@@ -43,16 +43,24 @@ def get_best_players(roster, selected_team, df):
     for key, value in roster.items():
         if value is None  and key != "FLEX" and slot_to_position[key] not in seen_positons:
             filtered = df[(df["position"] == slot_to_position[key]) & (df["recent_team"] == selected_team)]
-            best_player = filtered.loc[filtered["fantasy_points_ppr"].idxmax(), ["player_display_name", "fantasy_points_ppr"]]
-            best_selection[slot_to_position[key]] = best_player
             seen_positons.add(slot_to_position[key])
+            if filtered.empty:
+                continue
+            else:
+                best_player = filtered.loc[filtered["fantasy_points_ppr"].idxmax(), ["player_display_name", "fantasy_points_ppr"]]
+                best_selection[slot_to_position[key]] = best_player
+    if not best_selection:
+        return False
     return best_selection
 
-def update_roster(current_roster, best_selection, position, selection):
+def update_roster(current_roster, best_selection, position, selection, is_bonus):
     if position == slot_to_position[selection] or (selection == "FLEX" and position in slot_to_position[selection]):
-        player_data = best_selection[position]
-        current_roster[selection] = player_data
-        return True
+        if is_bonus == True and (current_roster[selection]["fantasy_points_ppr"] >= best_selection[position]["fantasy_points_ppr"]):
+            return False
+        else:
+            player_data = best_selection[position]
+            current_roster[selection] = player_data
+            return True
     else:
         return False
 
