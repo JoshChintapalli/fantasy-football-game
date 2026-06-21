@@ -49,6 +49,24 @@ def get_best_players(roster, selected_team, df):
             else:
                 best_player = filtered.loc[filtered["fantasy_points_ppr"].idxmax(), ["player_display_name", "fantasy_points_ppr"]]
                 best_selection[slot_to_position[key]] = best_player
+        elif value is None and key == "FLEX":
+            top_val = {
+                "player_display_name" : " ",
+                "fantasy_points_ppr" : 0
+            }
+            top_pos = None
+            for position in slot_to_position["FLEX"]:
+                if all(value is not None for key, value in roster.items() if slot_to_position[key] == position):
+                    filtered = df[(df["position"] == position) & (df["recent_team"] == selected_team)]
+                    if filtered.empty:
+                        continue
+                    else:
+                        best_player = filtered.loc[filtered["fantasy_points_ppr"].idxmax(), ["player_display_name", "fantasy_points_ppr"]]
+                        if best_player["fantasy_points_ppr"] > top_val["fantasy_points_ppr"]:
+                            top_val = best_player
+                            top_pos = position
+            if top_pos is not None:
+                best_selection[top_pos] = top_val
     if not best_selection:
         return False
     return best_selection
