@@ -79,11 +79,12 @@ elif st.session_state.game_phase == "selecting":
         st.session_state.game_phase = "spinning"
         st.rerun()
     if st.session_state.current_selection is None:
-        for position, stats in best_selection.items():
-            if st.session_state.is_bonus == False or any(
-                (slot_to_position[slot] == position or (slot == "FLEX" and position in slot_to_position[slot])) and stats["fantasy_points_ppr"] > val["fantasy_points_ppr"] for slot, val in st.session_state.roster.items()
-            ):
-                st.write(position, stats)
+        position_order = ["QB", "RB", "WR", "TE"]
+        for position in position_order:
+            if position in best_selection and (st.session_state.is_bonus == False or any(
+                (slot_to_position[slot] == position or (slot == "FLEX" and position in slot_to_position[slot])) and best_selection[position]["fantasy_points_ppr"] > val["fantasy_points_ppr"] for slot, val in st.session_state.roster.items()
+            )):
+                st.write(position, best_selection[position])
                 if st.button("Select Player", key = position):
                     st.session_state.current_selection = position
                     st.rerun()
