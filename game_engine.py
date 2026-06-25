@@ -87,7 +87,7 @@ def calculate_score(finished_roster):
     for key, value in finished_roster.items():
         if value is not None:
             total += value["fantasy_points_ppr"]
-    return total
+    return round(total)
 '''
 season, week, df, teams, roster = initialize_game(df)
 selected_team = spin_wheel(teams)
