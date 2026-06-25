@@ -80,14 +80,20 @@ elif st.session_state.game_phase == "selecting":
         st.rerun()
     if st.session_state.current_selection is None:
         position_order = ["QB", "RB", "WR", "TE"]
+        empty_bonus = True
         for position in position_order:
             if position in best_selection and (st.session_state.is_bonus == False or any(
                 (slot_to_position[slot] == position or (slot == "FLEX" and position in slot_to_position[slot])) and best_selection[position]["fantasy_points_ppr"] > val["fantasy_points_ppr"] for slot, val in st.session_state.roster.items()
             )):
                 st.write(position, best_selection[position])
+                empty_bonus = False
                 if st.button("Select Player", key = position):
                     st.session_state.current_selection = position
                     st.rerun()
+        if empty_bonus == True and st.session_state.is_bonus == True:
+            st.session_state.game_phase = "complete"
+            st.session_state.is_bonus = False
+            st.rerun()
     else:
         for pos, val in st.session_state.roster.items():
             col1, col2, col3 = st.columns([1, 1, 5])
@@ -111,6 +117,7 @@ elif st.session_state.game_phase == "selecting":
                         if valid_update == True:
                             if st.session_state.is_bonus == True:
                                 st.session_state.game_phase = "complete"
+                                st.session_state.is_bonus = False
                             else:
                                 if (all(value is not None for value in st.session_state.roster.values())):
                                     st.session_state.game_phase = "bonus"
@@ -125,9 +132,17 @@ elif st.session_state.game_phase == "bonus":
         st.session_state.season, st.session_state.week, st.session_state.df, st.session_state.teams, empty_roster = initialize_game(st.session_state.full_df)
         st.session_state.game_phase = "spinning"
         st.rerun()
-
-
-
-
-
-    
+elif st.session_state.game_phase == "complete":
+    st.title("Game Complete")
+    final_score = calculate_score(st.session_state.roster)
+    st.write("Final Score: ", final_score)
+    if final_score >= 200:
+        st.write("Crossed 200 points")
+    else:
+        st.write("Under 200 points")
+    if st.button("Restart"):
+        st.session_state.game_phase = "init"
+        st.session_state.week = None
+        st.session_state.current_team = None
+        st.session_state.current_selection = None
+        st.rerun()
