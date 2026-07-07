@@ -2,15 +2,6 @@ import streamlit as st
 import pandas as pd
 from game_engine import initialize_game, spin_wheel, get_best_players, update_roster, calculate_score, slot_to_position
 
-
-#init — game hasn't started yet
-#spinning — ready to spin the wheel
-#selecting — team has been spun, player selection is shown
-#bonus — roster is full, bonus round
-#complete — final score is shown
-
-
-
 if "season" not in st.session_state:
     st.session_state.season = None
 if "week" not in st.session_state:
