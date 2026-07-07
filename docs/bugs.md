@@ -10,16 +10,19 @@
 - Reproduction: Calling "update_roster()" with a mismatched position and slot, like selecting QB and placing it in a WR slot
 - Fix: Added position-to-slot compatibility check returning True/False, including special FLEX handling
 - Status: Fixed
+
 **FLEX Excluded from Selection Logic**
 - Description: FLEX handling was temporarily blocked off in "get_best_players()" because of other existing FLEX bugs, causing a black screen when FLEX was the last open slot
 - Reproduction: Fill all non-FLEX slots and attempt to spin - no player option appeared
 - Fix: Added a seperate FLEX branch that evaluates eligible positions only when their dedicated slots are all filled
 - Status: Fixed
+
 **Short-Circut Evaluation Ordering Bug**
 - Description: Selection validation check failed when the position was FLEX because FLEX had a list of eligble positions which was unhashable and cannot be checked against a set of seen psotions
 - Reproduction: Any spin where FLEX appeared in the roster loop before all positions were filled
 - Fix: Reordered condition to check if current key in the loop was FLEX first, short-circuting before the list was evaluated
 - Status: Fixed
+
 **FLEX Crash with List as Dictionary Key**
 - Description: Using a list of eligble positions for FLEX as a key to look up in the filtered dataset caused a TypeError since a list is unhashable
 - Reproduction: Triggered during bonus round slot display when position was FLEX
@@ -31,11 +34,13 @@
 - Reproduction: Enter bonus round with RB1 scoring higher than the bonus round RB selection but RB2 scoring lower, RB selection would not appear
 - Fix: Moved upgrade comparison to slot level in "app.py", evaluating each slot independently against the single best player for that position
 - Status: Fixed
+
 **Replace Buttons Showing for Non-Matching Positions**
 - Description: After selecting a position in the bonus round, replace buttons appeard for all slots on the roster even if the selection was not eligible to go in that slot
 - Reproduction: Select QB in the bonus round and see replace buttons for every slot
 - Fix: Add position-matching condition before rendering replace buttons, including FLEX compatiblitiy check
 - Status: Fixed
+
 **Non-Upgradable Positions SHowing in Bonus Selection**
 - Description: The bonus player selection screen showed positions where no roster slot would actually improve, leaving the user stuck with no valid replace buttons
 - Reproduction: Spin a bonus team where the best available player scores lower than all matching roster slots
