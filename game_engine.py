@@ -39,11 +39,11 @@ def spin_wheel(teams):
 
 def get_best_players(roster, selected_team, df):
     best_selection = {}
-    seen_positons = set()
+    seen_positions = set()
     for key, value in roster.items():
-        if value is None  and key != "FLEX" and slot_to_position[key] not in seen_positons:
+        if value is None  and key != "FLEX" and slot_to_position[key] not in seen_positions:
             filtered = df[(df["position"] == slot_to_position[key]) & (df["recent_team"] == selected_team)]
-            seen_positons.add(slot_to_position[key])
+            seen_positions.add(slot_to_position[key])
             if filtered.empty:
                 continue
             else:
@@ -76,9 +76,12 @@ def update_roster(current_roster, best_selection, position, selection, is_bonus)
         if is_bonus == True and (current_roster[selection]["fantasy_points_ppr"] >= best_selection[position]["fantasy_points_ppr"]):
             return False
         else:
-            player_data = best_selection[position]
-            current_roster[selection] = player_data
-            return True
+            if (is_bonus is False and current_roster[selection] is None) or is_bonus is True:
+                player_data = best_selection[position]
+                current_roster[selection] = player_data
+                return True
+            else:
+                return False
     else:
         return False
 
@@ -88,30 +91,3 @@ def calculate_score(finished_roster):
         if value is not None:
             total += value["fantasy_points_ppr"]
     return round(total)
-'''
-season, week, df, teams, roster = initialize_game(df)
-selected_team = spin_wheel(teams)
-best_roster = get_best_players(roster, selected_team, df)
-print(roster)
-print()
-update_roster(roster, best_roster, 'RB', "FLEX")
-print(roster)
-print()
-
-selected_team = spin_wheel(teams)
-best_roster = get_best_players(roster, selected_team, df)
-print(best_roster)
-print()
-update_roster(roster, best_roster, "RB", 'FLEX')
-print(roster)
-print()
-selected_team = spin_wheel(teams)
-best_roster = get_best_players(roster, selected_team, df)
-print(best_roster)
-print()
-update_roster(roster, best_roster, "WR", 'WR2')
-print(roster)
-print()
-points = calculate_score(roster)
-print(points)
-'''
