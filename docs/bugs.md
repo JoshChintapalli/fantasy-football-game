@@ -28,6 +28,12 @@
 - Reproduction: Triggered during bonus round slot display when position was FLEX.
 - Fix: Replaced "best_selection[slot_to_position[pos]]" with "best_selection[st.session_state.current_selection]" for the points lookup.
 - Status: Fixed.
+
+**Filled Slots Overridden when not in the Bonus Round**
+- Description: A manual call of the "update_roster" function in "game_engine.py" could cause an already filled slot in the roster to be overridden when it is not the bonus round. Slots can only be overridden during the bonus round.
+- Reproduction: Found while writing unit test for checking successful and unsuccessful roster changed.
+- Fix: Add a condition inside "update_roster" to check if it is not the bonus round and the selected slot is empty, or it is the bonus round (in which case, the slot should be filled and overridden if valid).
+- Status: Fixed.
 # Bonus Round Bugs
 **RB1/RB2 Not Evaluated Independently**
 - Description: RB2 was skipped in the bonus round check to evaluate eligible positions to upgrade because RB was a seen position.
