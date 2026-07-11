@@ -34,6 +34,12 @@
 - Reproduction: Found while writing unit test for checking successful and unsuccessful roster changed.
 - Fix: Add a condition inside "update_roster" to check if it is not the bonus round and the selected slot is empty, or it is the bonus round (in which case, the slot should be filled and overridden if valid).
 - Status: Fixed.
+
+**FLEX Re-spin when Option is Zero**
+- Description: If all the available FLEX positions score zero points, then the selection is treaded the same as an empty dataframe and allows a re-spin instead of giving the player as an option.
+- Reproduction: Found while writing unit test for checking what happens if all available positions in the selected team for the FLEX slot score zero points.
+- Fix: Change "best_player["fantasy_points_ppr"] > top_val["fantasy_points_ppr"]" to "f best_player["fantasy_points_ppr"] >= top_val["fantasy_points_ppr"]", so any player with zero points would pass the condition and be stored since the stored highest scoring position was initialized to None.
+- Status: Fixed.
 # Bonus Round Bugs
 **RB1/RB2 Not Evaluated Independently**
 - Description: RB2 was skipped in the bonus round check to evaluate eligible positions to upgrade because RB was a seen position.
