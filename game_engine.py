@@ -62,7 +62,7 @@ def get_best_players(roster, selected_team, df):
                         continue
                     else:
                         best_player = filtered.loc[filtered["fantasy_points_ppr"].idxmax(), ["player_display_name", "fantasy_points_ppr"]]
-                        if best_player["fantasy_points_ppr"] > top_val["fantasy_points_ppr"]:
+                        if best_player["fantasy_points_ppr"] >= top_val["fantasy_points_ppr"]:
                             top_val = best_player
                             top_pos = position
             if top_pos is not None:
